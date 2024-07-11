@@ -9,6 +9,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import InspectorList from './inspector-list' // Import the InspectorList component
 
 const Sheet = SheetPrimitive.Root
 
@@ -147,6 +148,28 @@ const SheetDescription = React.forwardRef<
 })
 SheetDescription.displayName = SheetPrimitive.Description.displayName
 
+const SheetComponent = ({ open, setOpen }: { open: boolean, setOpen: (open: boolean) => void }) => {
+  return (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <button>Open Sheet</button>
+      </SheetTrigger>
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>Inspector List</SheetTitle>
+          <SheetDescription>Update pin information or assign a new user.</SheetDescription>
+        </SheetHeader>
+        <InspectorList open={open} setOpen={setOpen} onInspectorAssign={(user) => console.log('User assigned:', user)} />
+        <SheetFooter>
+          <SheetClose asChild>
+            <button>Close</button>
+          </SheetClose>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
+  )
+}
+
 export {
   Sheet,
   SheetPortal,
@@ -158,4 +181,5 @@ export {
   SheetFooter,
   SheetTitle,
   SheetDescription,
+  SheetComponent // Export the new SheetComponent
 }

@@ -8,8 +8,8 @@ import { Row } from '@tanstack/react-table'
 import { useRouter } from 'next/navigation'
 import React, { useReducer, useState } from 'react'
 import { MdMoreVert } from 'react-icons/md'
-import { AiOutlineUserAdd,AiOutlineUserDelete, AiOutlineCheck } from 'react-icons/ai'
-import { BsFillMapFill,BsFillTrashFill } from 'react-icons/bs'
+import { AiOutlineUserAdd, AiOutlineUserDelete, AiOutlineCheck } from 'react-icons/ai'
+import { BsFillMapFill, BsFillTrashFill } from 'react-icons/bs'
 import AlertModal from '@/components/modal/alert-modal'
 import { buildUrl } from '@/lib/utils'
 import { toast } from 'react-toastify'
@@ -41,7 +41,7 @@ export function RowActions({
 
     // using reducer
     const [state, setState] = useReducer((prevstate: RowActionReducerProps, params: RowActionReducerProps) => {
-        return {...prevstate, ...params}
+        return { ...prevstate, ...params }
     }, {
         alertDialog: false,
         alertDialogReason: AlertDialogReasonEnum.NONE,
@@ -63,7 +63,7 @@ export function RowActions({
     }
 
     const handleConfirm = async () => {
-        if( state.alertDialogReason === AlertDialogReasonEnum.DELETE) {
+        if (state.alertDialogReason === AlertDialogReasonEnum.DELETE) {
 
             setProgress(true)
             await fetch(buildUrl(`ticket/${ticket.id}`), {
@@ -86,7 +86,7 @@ export function RowActions({
             router.refresh()
         }
     }
-    
+
     const handleInspectorAssign = async (inspector: User) => {
         try {
             setProgress(true)
@@ -140,61 +140,82 @@ export function RowActions({
             mapDialog: true
         })
     }
-  return (
-    <>
 
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button
-                    variant="ghost"
-                    className='flex h-8 w-8 p-0 data-[state=open]:bg:muted'
-                >
-                    <span className='sr-only'>Open Menu</span>
-                    <MdMoreVert />
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => setOpen(true)}>
-                    <AiOutlineUserAdd className="mr-2 h-4 w-4"/>
-                    Assign
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleUnassign}>
-                    <AiOutlineUserDelete className="mr-2 h-4 w-4"/>
-                    UnAssign
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleMapview}>
-                    <BsFillMapFill className="mr-2 h-4 w-4"/>
-                    Map View
-                </DropdownMenuItem>
-                <DropdownMenuItem className="text-green-600" onClick={handleMarkComplete}>
-                    <AiOutlineCheck className="mr-2 h-4 w-4"/>
-                    Mark complete
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-red-600" onClick={handleDelete}>
-                    <BsFillTrashFill className="mr-2 h-4 w-4"/>
-                    Delete
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+    const handleUpdatePin = async (pinInfo: string) => {
+        try {
+            setProgress(true)
 
-        <MapDialog 
-            open={state.mapDialog!}
-            onClose={() => setState({mapDialog: false})}
-            latlong={ticket.latlong!}
-        />
-        <InspectorList open={open} setOpen={setOpen} onInspectorAssign={handleInspectorAssign}/>
-        <AlertModal 
-            open={state.alertDialog!}
-            onClose={() => setState({
-                alertDialog: false,
-                alertDialogReason: AlertDialogReasonEnum.NONE
-            })}
-            onConfirm={handleConfirm}
-        />
-    </>
-  )
+            await fetch(buildUrl(`ticket/${ticket.id}`), {
+                method: 'PATCH',
+                body: JSON.stringify({
+                    pinInfo
+                })
+            })
+
+            setProgress(false)
+            toast.success('Pin information updated')
+            router.refresh()
+        } catch (error) {
+            setProgress(false)
+            console.log(error)
+        }
+    }
+
+    return (
+        <>
+
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button
+                        variant="ghost"
+                        className='flex h-8 w-8 p-0 data-[state=open]:bg:muted'
+                    >
+                        <span className='sr-only'>Open Menu</span>
+                        <MdMoreVert />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuItem onClick={() => setOpen(true)}>
+                        <AiOutlineUserAdd className="mr-2 h-4 w-4" />
+                        Assign
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleUnassign}>
+                        <AiOutlineUserDelete className="mr-2 h-4 w-4" />
+                        UnAssign
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleMapview}>
+                        <BsFillMapFill className="mr-2 h-4 w-4" />
+                        Map View
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="text-green-600" onClick={handleMarkComplete}>
+                        <AiOutlineCheck className="mr-2 h-4 w-4" />
+                        Mark complete
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="text-red-600" onClick={handleDelete}>
+                        <BsFillTrashFill className="mr-2 h-4 w-4" />
+                        Delete
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+
+            <MapDialog
+                open={state.mapDialog!}
+                onClose={() => setState({ mapDialog: false })}
+                latlong={ticket.latlong!}
+            />
+            <InspectorList open={open} setOpen={setOpen} onInspectorAssign={handleInspectorAssign} onUpdatePin={handleUpdatePin} />
+            <AlertModal
+                open={state.alertDialog!}
+                onClose={() => setState({
+                    alertDialog: false,
+                    alertDialogReason: AlertDialogReasonEnum.NONE
+                })}
+                onConfirm={handleConfirm}
+            />
+        </>
+    )
 }
 
 export default RowActions
