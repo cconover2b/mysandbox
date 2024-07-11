@@ -1,4 +1,3 @@
-// app/dashboard/row-actions.tsx
 'use client'
 
 import { Button } from '@/components/ui/button'
@@ -141,7 +140,7 @@ export function RowActions({
         })
     }
 
-    const handleUpdatePin = async (pinInfo: string) => {
+    const handleUpdatePin = async (pinInfo: Pin) => {
         try {
             setProgress(true)
 
@@ -193,29 +192,4 @@ export function RowActions({
                         Mark complete
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-red-600" onClick={handleDelete}>
-                        <BsFillTrashFill className="mr-2 h-4 w-4" />
-                        Delete
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-
-            <MapDialog
-                open={state.mapDialog!}
-                onClose={() => setState({ mapDialog: false })}
-                latlong={ticket.latlong!}
-            />
-            <InspectorList open={open} setOpen={setOpen} onInspectorAssign={handleInspectorAssign} onUpdatePin={handleUpdatePin} />
-            <AlertModal
-                open={state.alertDialog!}
-                onClose={() => setState({
-                    alertDialog: false,
-                    alertDialogReason: AlertDialogReasonEnum.NONE
-                })}
-                onConfirm={handleConfirm}
-            />
-        </>
-    )
-}
-
-export default RowActions
+                    <

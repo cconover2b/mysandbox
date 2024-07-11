@@ -1,4 +1,3 @@
-// inspector-list.tsx
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { User, Pin } from '@/types';
@@ -8,9 +7,10 @@ interface InspectorListProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   onInspectorAssign: (inspector: User) => void;
+  onUpdatePin: (pinInfo: Pin) => void; // Added this line
 }
 
-const InspectorList: React.FC<InspectorListProps> = ({ open, setOpen, onInspectorAssign }) => {
+const InspectorList: React.FC<InspectorListProps> = ({ open, setOpen, onInspectorAssign, onUpdatePin }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [pinInfo, setPinInfo] = useState<Pin>({ id: '', name: '', description: '' });
@@ -24,9 +24,11 @@ const InspectorList: React.FC<InspectorListProps> = ({ open, setOpen, onInspecto
     fetchData();
   }, []);
 
-  const handlePinUpdate = async () => {
+  const handlePinUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (pinInfo.id) {
       await updatePin(pinInfo);
+      onUpdatePin(pinInfo); // Call the onUpdatePin function
       alert('Pin information updated');
     }
   };
