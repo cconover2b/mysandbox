@@ -1,3 +1,4 @@
+// map-dialog.tsx
 import React from 'react'
 import {
     Dialog,

@@ -29,12 +29,14 @@ function Map(latlong: LatLong) {
             const position = {
                 lat: latlong.coordinates[0],
                 lng: latlong.coordinates[1]
+                // lat: 43.6425662,
+                // lng: -79.3870568
             }
 
             const mapOptions = {
                 center: position,
                 zoom: 17,
-                mapId: 'PETRESCUE-1234'
+                mapId: 'TrackIt-001'
             }
 
             // setup the map
