@@ -1,5 +1,7 @@
 'use client'
 
+// app/dashboard/row-actions.tsx
+import { Pin } from "@/types"; // Import Pin type
 import { Button } from '@/components/ui/button'
 import { Ticket, TicketStatus, User } from '@/types'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
@@ -15,18 +17,21 @@ import { toast } from 'react-toastify'
 import InspectorList from './inspector-list'
 import MapDialog from '@/components/dialog/map-dialog'
 
+// Enum for alert dialog reasons
 enum AlertDialogReasonEnum {
     NONE = "",
     MARK_COMPLETE = 'complete',
     DELETE = 'delete'
 }
 
+// Interface for the state managed by the reducer
 interface RowActionReducerProps {
     alertDialog?: boolean,
     alertDialogReason?: AlertDialogReasonEnum,
     mapDialog?: boolean
 }
 
+// Component for row actions
 export function RowActions({
     row
 }: {
@@ -38,7 +43,7 @@ export function RowActions({
     const [progress, setProgress] = useState(false)
     const [open, setOpen] = useState(false)
 
-    // using reducer
+    // Using reducer to manage state
     const [state, setState] = useReducer((prevstate: RowActionReducerProps, params: RowActionReducerProps) => {
         return { ...prevstate, ...params }
     }, {
@@ -47,6 +52,7 @@ export function RowActions({
         mapDialog: false,
     })
 
+    // Handle delete action
     const handleDelete = () => {
         setState({
             alertDialog: true,
@@ -54,6 +60,7 @@ export function RowActions({
         })
     }
 
+    // Handle mark complete action
     const handleMarkComplete = () => {
         setState({
             alertDialog: true,
@@ -61,9 +68,9 @@ export function RowActions({
         })
     }
 
+    // Handle confirm action in alert dialog
     const handleConfirm = async () => {
         if (state.alertDialogReason === AlertDialogReasonEnum.DELETE) {
-
             setProgress(true)
             await fetch(buildUrl(`ticket/${ticket.id}`), {
                 method: "DELETE"
@@ -79,17 +86,16 @@ export function RowActions({
                     status: TicketStatus.COMPLETED
                 })
             })
-
             setProgress(false)
             toast.success('Ticket status updated')
             router.refresh()
         }
     }
 
+    // Handle inspector assignment
     const handleInspectorAssign = async (inspector: User) => {
         try {
             setProgress(true)
-
             await fetch(buildUrl(`ticket/${ticket.id}`), {
                 method: 'PATCH',
                 body: JSON.stringify({
@@ -97,7 +103,6 @@ export function RowActions({
                     status: TicketStatus.ASSIGNED
                 })
             })
-
             setProgress(false)
             toast.success(`Ticket assigned to ${inspector.fullName}`)
             router.refresh()
@@ -107,17 +112,16 @@ export function RowActions({
         }
     }
 
+    // Handle unassign action
     const handleUnassign = async () => {
         try {
             setProgress(true);
-            // fire an api call to update the ticket
             const result = await fetch(buildUrl(`ticket/${ticket.id}`), {
                 method: 'PATCH',
                 body: JSON.stringify({
                     status: TicketStatus.UNASSIGNED
                 })
             });
-
             const { status } = result;
             setProgress(false);
             if (status === 200) {
@@ -126,7 +130,6 @@ export function RowActions({
             } else {
                 toast.error("Failed to update ticket")
             }
-
         } catch (error) {
             setProgress(true);
             toast.error("Server error")
@@ -134,23 +137,23 @@ export function RowActions({
         }
     }
 
+    // Handle map view action
     const handleMapview = () => {
         setState({
             mapDialog: true
         })
     }
 
+    // Handle pin update action
     const handleUpdatePin = async (pinInfo: Pin) => {
         try {
             setProgress(true)
-
             await fetch(buildUrl(`ticket/${ticket.id}`), {
                 method: 'PATCH',
                 body: JSON.stringify({
                     pinInfo
                 })
             })
-
             setProgress(false)
             toast.success('Pin information updated')
             router.refresh()
@@ -162,7 +165,6 @@ export function RowActions({
 
     return (
         <>
-
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button
@@ -192,4 +194,38 @@ export function RowActions({
                         Mark complete
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <
+                    <DropdownMenuItem onClick={handleDelete}>
+                        <BsFillTrashFill className="mr-2 h-4 w-4" />
+                        Delete
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+
+            {state.alertDialog && (
+                <AlertModal
+                    open={state.alertDialog} // Changed from isOpen to open
+                    onClose={() => setState({ alertDialog: false })}
+                    onConfirm={handleConfirm}
+                />
+            )}
+
+            {state.mapDialog && (
+                <MapDialog
+                    open={state.mapDialog} // Changed from isOpen to open
+                    onClose={() => setState({ mapDialog: false })}
+                    onUpdatePin={handleUpdatePin} // Ensure MapDialog accepts this prop
+                    latlong={ticket.latlong} // Pass latlong prop
+                />
+            )}
+
+            {open && (
+                <InspectorList
+                    open={open} // Changed from isOpen to open
+                    setOpen={setOpen} // Added this line
+                    onInspectorAssign={handleInspectorAssign} // Changed from onAssign to onInspectorAssign
+                    onUpdatePin={handleUpdatePin} // Added this line
+                />
+            )}
+        </>
+    )
+}

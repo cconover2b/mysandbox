@@ -1,5 +1,5 @@
 // components/modal/alert-modal.tsx
-import React from 'react'
+import React from 'react';
 import {
     AlertDialog,
     AlertDialogContent,
@@ -9,15 +9,15 @@ import {
     AlertDialogTitle,
     AlertDialogCancel,
     AlertDialogAction
-} from '../ui/alert-dialog'
+} from '../ui/alert-dialog';
 
-function AlertModal({
-    open, onClose, onConfirm
-}: {
-    open: boolean,
-    onClose: () => void,
-    onConfirm: () => void
-}) {
+interface AlertModalProps {
+    open: boolean;
+    onClose: () => void;
+    onConfirm: () => void;
+}
+
+const AlertModal: React.FC<AlertModalProps> = ({ open, onClose, onConfirm }) => {
     return (
         <AlertDialog open={open} onOpenChange={onClose}>
             <AlertDialogContent>
@@ -33,7 +33,7 @@ function AlertModal({
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
-    )
-}
+    );
+};
 
-export default AlertModal
+export default AlertModal;

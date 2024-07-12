@@ -1,15 +1,16 @@
-import type { Config } from "tailwindcss"
+// tailwind.config.js
+import type { Config } from "tailwindcss";
+import { fontFamily } from "tailwindcss/defaultTheme";
+import tailwindcssAnimate from "tailwindcss-animate";
 
-const { fontFamily } = require("tailwindcss/defaultTheme")
-
-const config = {
+const config: Config = {
   darkMode: ["class"],
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   prefix: "",
   theme: {
     container: {
@@ -79,7 +80,7 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-} satisfies Config
+  plugins: [tailwindcssAnimate],
+};
 
-export default config
+export default config;

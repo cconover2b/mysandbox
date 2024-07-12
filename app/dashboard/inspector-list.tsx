@@ -1,7 +1,8 @@
+// app/dashboard/inspector-list.tsx
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { User, Pin } from '@/types';
-import { fetchUsers, updatePin, assignUserToPin } from '@/lib/api'; // Assume these functions are defined in your API utility file
+import { fetchUsers, updatePin, assignUserToPin } from '@/lib/api'; // Ensure this module exists and is correctly named
 
 interface InspectorListProps {
   open: boolean;
@@ -13,7 +14,7 @@ interface InspectorListProps {
 const InspectorList: React.FC<InspectorListProps> = ({ open, setOpen, onInspectorAssign, onUpdatePin }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [pinInfo, setPinInfo] = useState<Pin>({ id: '', name: '', description: '' });
+  const [pinInfo, setPinInfo] = useState<Pin>({ id: '', name: '', description: '', latitude: 0, longitude: 0 });
 
   useEffect(() => {
     // Fetch users when the component mounts

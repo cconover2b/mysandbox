@@ -1,6 +1,6 @@
 import { connectToDB } from "@/lib/db";
 import { comparePassword } from "@/lib/utils";
-import { UserModel } from "@/schemas/user";
+import UserModel from '@/schemas/user';
 import nextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
