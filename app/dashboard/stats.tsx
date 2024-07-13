@@ -1,34 +1,43 @@
 // app/dashboard/stats.tsx
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { buildUrl } from '@/lib/utils'
-import React from 'react'
+
+// Importing necessary components and libraries
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'; // Custom Card components
+import { buildUrl } from '@/lib/utils'; // Utility function for building URLs
+import React from 'react'; // React library
 import {
     MdFiberNew,
-    MdOutlineDoneOutline, MdOutlineAssignmentTurnedIn, MdPersonAddDisabled
-} from 'react-icons/md'
+    MdOutlineDoneOutline,
+    MdOutlineAssignmentTurnedIn,
+    MdPersonAddDisabled
+} from 'react-icons/md'; // Material Design icons
 
+// Interface for the stats data structure
 interface Stats {
-    _id: { status: string },
-    count: number
+    _id: { status: string }, // Status identifier
+    count: number // Count of tickets for the given status
 }
 
+// Async function component to fetch and display stats
 async function Stats() {
 
-    // data from the backend fetch request
+    // Fetching data from the backend
     const stats = await fetch(buildUrl('stats'), {
-        cache: 'no-cache'
-    })
+        cache: 'no-cache' // Ensuring fresh data is fetched
+    });
 
-    const json: Stats[] = await stats.json()
+    // Parsing the JSON response
+    const json: Stats[] = await stats.json();
 
+    // Function to get the count for a specific status
     const statsFor = (token: string) => {
-        const filteredStats = json.filter(stats => stats._id.status === token)
+        const filteredStats = json.filter(stats => stats._id.status === token);
         return filteredStats.length > 0 ?
-            filteredStats.map(stats => stats.count) : 0
-    }
+            filteredStats.map(stats => stats.count) : 0;
+    };
+
     return (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-
+            {/* Card for New Tickets */}
             <Card className='bg-orange-300'>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-lg font-medium">
@@ -43,6 +52,7 @@ async function Stats() {
                 </CardContent>
             </Card>
 
+            {/* Card for Completed Tickets */}
             <Card className="bg-green-300">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-lg font-medium">
@@ -57,6 +67,7 @@ async function Stats() {
                 </CardContent>
             </Card>
 
+            {/* Card for Assigned Tickets */}
             <Card className="bg-purple-300">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-lg font-medium">
@@ -70,7 +81,8 @@ async function Stats() {
                     <div className="text-2xl font-bold">{statsFor('assigned')}</div>
                 </CardContent>
             </Card>
-            
+
+            {/* Card for Unassigned Tickets */}
             <Card className="bg-red-300">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-lg font-medium">
@@ -85,7 +97,7 @@ async function Stats() {
                 </CardContent>
             </Card>
         </div>
-    )
+    );
 }
 
-export default Stats
+export default Stats; // Exporting the component as the default export

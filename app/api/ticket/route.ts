@@ -1,18 +1,24 @@
 // app/api/ticket/route.ts
-import { connectToDB } from "@/lib/db";
-import { TicketModel } from "@/schemas/ticket";
 
+// Import necessary modules and functions
+import { connectToDB } from "@/lib/db"; // Function to connect to the database
+import { TicketModel } from "@/schemas/ticket"; // Ticket model schema
 
+// GET function to handle fetching all tickets
 export async function GET() {
-
     try {
-        await connectToDB()
+        // Connect to the database
+        await connectToDB();
 
-        const tickets = await TicketModel.find({}).populate('assignedInspector')
+        // Fetch all tickets from the database and populate the 'assignedInspector' field
+        const tickets = await TicketModel.find({}).populate('assignedInspector');
 
-        return Response.json(tickets)
-    } catch(error) {
+        // Return the fetched tickets as a JSON response
+        return Response.json(tickets);
+    } catch (error) {
+        // Log any errors that occur during the process
         console.log(error);
-        return Response.json({message: "Failed to get tickets"});
+        // Return an error response
+        return Response.json({ message: "Failed to get tickets" });
     }
 }

@@ -1,6 +1,19 @@
 // app/dashboard/data-table.tsx
-'use client';
+'use client'; // This directive indicates that the code in this file should be executed on the client side.
 
+/**
+ * Importing necessary modules and components:
+ * - Button, Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow: UI components for building the table and its controls.
+ * - DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger: Components for creating dropdown menus.
+ * - Various hooks and utilities from '@tanstack/react-table' for table functionalities.
+ * - useRouter: A hook from 'next/navigation' for navigation purposes.
+ * - useState: A React hook for managing state.
+ * - BsChevronDown: An icon from 'react-icons/bs'.
+ * - Ticket, TicketStatus: Types for ticket data.
+ * - buildUrl: A utility function for building URLs.
+ * - toast: A library for displaying notifications.
+ * - PhotoModal, LoadingModal: Custom modal components.
+ */
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -32,17 +45,42 @@ import { toast } from 'react-toastify';
 import PhotoModal from "@/components/modal/photo-modal";
 import LoadingModal from "@/components/modal/loading-modal";
 
+/**
+ * Extending the TableMeta interface from '@tanstack/react-table' to include a custom method.
+ */
 declare module '@tanstack/react-table' {
     interface TableMeta<TData extends RowData> {
         photoThumbClicked: (rowIndex: string) => void;
     }
 }
 
+/**
+ * DataTableProps Interface
+ *
+ * @template TData - The type of data for the table rows.
+ * @template TValue - The type of value for the table columns.
+ *
+ * @property {ColumnDef<TData, TValue>[]} columns - The column definitions for the table.
+ * @property {TData[]} data - The data to be displayed in the table.
+ */
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
 }
 
+/**
+ * DataTable Component
+ *
+ * This component renders a data table with sorting, filtering, and row selection functionalities.
+ * It also includes bulk actions for marking tickets as complete or deleting them.
+ *
+ * @template TData - The type of data for the table rows.
+ * @template TValue - The type of value for the table columns.
+ *
+ * @param {DataTableProps<TData, TValue>} props - The properties passed to the component.
+ *
+ * @returns {JSX.Element} The rendered data table component.
+ */
 export function DataTable<TData extends RowData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -81,6 +119,12 @@ export function DataTable<TData extends RowData, TValue>({ columns, data }: Data
         }
     });
 
+    /**
+     * Handles marking selected tickets as complete.
+     *
+     * @async
+     * @function handleMarkComplete
+     */
     const handleMarkComplete = async () => {
         const rowIndex = Object.keys(rowSelection);
         const ticketsToMark: Ticket[] = [];
@@ -94,7 +138,7 @@ export function DataTable<TData extends RowData, TValue>({ columns, data }: Data
                 }
             });
 
-            // fire a http call
+            // Fire an HTTP call to update the tickets' status
             await fetch(buildUrl('ticket/bulk'), {
                 method: 'PATCH',
                 body: JSON.stringify({
@@ -113,6 +157,12 @@ export function DataTable<TData extends RowData, TValue>({ columns, data }: Data
         }
     };
 
+    /**
+     * Handles deleting selected tickets.
+     *
+     * @async
+     * @function handleDelete
+     */
     const handleDelete = async () => {
         const rowIndex = Object.keys(rowSelection);
         const ticketsToDelete: Ticket[] = [];
@@ -145,7 +195,7 @@ export function DataTable<TData extends RowData, TValue>({ columns, data }: Data
 
     return (
         <div>
-            {/* toolbar */}
+            {/* Toolbar for bulk actions and filtering */}
             <div className="flex items-center py-4">
                 {
                     Object.keys(rowSelection).length > 0 ?
@@ -177,6 +227,7 @@ export function DataTable<TData extends RowData, TValue>({ columns, data }: Data
                 }
             </div>
 
+            {/* Table rendering */}
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
@@ -229,6 +280,7 @@ export function DataTable<TData extends RowData, TValue>({ columns, data }: Data
                 </Table>
             </div>
 
+            {/* Modals for loading and photo viewing */}
             <LoadingModal open={loading} />
             <PhotoModal open={photoModal.open}
                 onClose={() => setPhotoModal({ open: false, url: '' })}

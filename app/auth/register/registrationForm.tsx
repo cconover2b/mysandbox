@@ -1,23 +1,32 @@
-// app/auth/register/registrationForm.tsx
 'use client'
+// app/auth/register/registrationForm.tsx
 
-import React from 'react'
-import { useFormState } from 'react-dom'
-import { registerUser } from '../actions/actions'
-import { Input } from '@/components/ui/input'
-import SubmitButton from '@/components/ui/submit-button'
+// Import necessary modules and components
+import React from 'react';
+import { useFormState } from 'react-dom'; // Custom hook to manage form state
+import { registerUser } from '../actions/actions'; // Function to handle user registration
+import { Input } from '@/components/ui/input'; // Custom Input component
+import SubmitButton from '@/components/ui/submit-button'; // Custom SubmitButton component
 
+// Initial state for the form
 const initialState = {
-    message: ''
-}
+    message: '' // Message to display errors or success messages
+};
+
+// RegistrationForm component
 function RegistrationForm() {
-    const [state, formAction] = useFormState(registerUser, initialState)
+    // useFormState hook to manage form state and actions
+    // `state` holds the current state of the form
+    // `formAction` is the function to handle form submission
+    const [state, formAction] = useFormState(registerUser, initialState);
+
     return (
         <form className='space-y-6 shadow-md p-4' action={formAction}>
             {
+                // Conditionally render the error message if it exists in the state
                 state.message &&
                 <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-                    <p>{state.message}</p>
+                    <p>{state.message}</p> {/* Display the error message */}
                 </div>
             }
             <div>
@@ -59,7 +68,9 @@ function RegistrationForm() {
                         name='email'
                         type="email"
                         placeholder="Email"
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        required
+                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    />
                 </div>
             </div>
 
@@ -81,10 +92,11 @@ function RegistrationForm() {
             </div>
 
             <div>
-                <SubmitButton title='Register' />
+                <SubmitButton title='Register' /> {/* Custom submit button with title 'Register' */}
             </div>
         </form>
-    )
+    );
 }
 
-export default RegistrationForm
+// Export the RegistrationForm component as the default export
+export default RegistrationForm;

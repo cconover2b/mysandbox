@@ -1,17 +1,18 @@
 // app/dashboard/columns.tsx
 'use client'
 
+// Importing necessary components and types
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Ticket, User } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { CiImageOff } from 'react-icons/ci';
-import { AiOutlineArrowUp } from 'react-icons/ai'
+import { AiOutlineArrowUp } from 'react-icons/ai';
 import { Badge } from "@/components/ui/badge";
 import { RowActions } from "./row-actions";
 import { Checkbox } from "@/components/ui/checkbox";
 
-
+// Define the columns for the table, specifying the type as an array of ColumnDef<Ticket>
 export const columns: ColumnDef<Ticket>[] = [
     {
         id: "select",
@@ -66,17 +67,17 @@ export const columns: ColumnDef<Ticket>[] = [
     {
         accessorKey: 'assignedInspector',
         header: "Assigned to",
-        cell: ({row}) => (row.getValue('assignedInspector') as User)?.fullName || ''
+        cell: ({ row }) => (row.getValue('assignedInspector') as User)?.fullName || ''
     },
     {
         accessorKey: "status",
         header: "Status",
-        cell: ({row}) => {
+        cell: ({ row }) => {
             let color = 'bg-green-300'
 
             const status: string = row.getValue('status')
 
-            switch(status) {
+            switch (status) {
                 case 'new':
                     color = 'bg-orange-300'
                     break;
@@ -85,7 +86,7 @@ export const columns: ColumnDef<Ticket>[] = [
                     break;
                 case 'unassigned':
                     color = 'bg-red-300'
-                    break
+                    break;
             }
 
             return <Badge className={`${color}`}>{status}</Badge>
@@ -93,6 +94,6 @@ export const columns: ColumnDef<Ticket>[] = [
     },
     {
         id: 'actions',
-        cell: ({row}) => <RowActions row={row} />
+        cell: ({ row }) => <RowActions row={row} />
     }
 ]

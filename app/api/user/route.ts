@@ -1,20 +1,26 @@
 // app/api/user/route.ts
-import { connectToDB } from "@/lib/db";
-import { UserModel } from "@/schemas/user";
 
+// Import necessary modules and functions
+import { connectToDB } from "@/lib/db"; // Function to connect to the database
+import { UserModel } from "@/schemas/user"; // User model schema
 
+// GET function to handle fetching all users
 export async function GET() {
-
     try {
-        await connectToDB()
+        // Connect to the database
+        await connectToDB();
 
-        const users = await UserModel.find({})
+        // Fetch all users from the database
+        const users = await UserModel.find({});
 
-        return Response.json(users)
+        // Return the fetched users as a JSON response
+        return Response.json(users);
     } catch (error) {
-        console.log(error)
+        // Log any errors that occur during the process
+        console.log(error);
+        // Return an error response
         return Response.json({
             message: "Failed to get users"
-        })
+        });
     }
 }
