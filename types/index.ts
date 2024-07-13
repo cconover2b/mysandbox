@@ -34,8 +34,9 @@ export type User = {
 
 // Enum for Ticket Status
 export enum TicketStatus {
-    NEW = 'new', // New ticket
-    COMPLETED = 'completed', // Completed ticket
-    ASSIGNED = 'assigned', // Assigned ticket
-    UNASSIGNED = 'unassigned' // Unassigned ticket
+    NEW = 'new', // Add a sign 
+    COMPLETED = 'completed', // Placed sign 
+    ASSIGNED = 'assigned', // Assigned to be Fixed
+    UNASSIGNED = 'unassigned' // Disappeared. Either ADD a new sign or DELETE it
+    // DELETED = sign is deleted 
 }

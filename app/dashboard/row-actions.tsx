@@ -93,21 +93,44 @@ export function RowActions({
     };
 
     // Handler for assigning an inspector to a ticket
-    const handleInspectorAssign = async (inspector: User) => {
+    // const handleInspectorAssign = async (inspector: User) => {
+    //     try {
+    //         setProgress(true);
+            // await fetch(buildUrl(`ticket/${ticket.id}`), {
+    //             method: 'PATCH',
+    //             body: JSON.stringify({
+    //                 inspector: inspector.id,
+    //                 status: TicketStatus.ASSIGNED
+    //             })
+    //         });
+    //         setProgress(false);
+    //         toast.success(`Ticket assigned to ${inspector.fullName}`);
+    //         router.refresh();
+    //     } catch (error) {
+    //         setProgress(false);
+    //         console.log(error);
+    //     }
+    // };
+    const handleInspectorAssign = async () => {
         try {
             setProgress(true);
-            await fetch(buildUrl(`ticket/${ticket.id}`), {
+            const result = await fetch(buildUrl(`ticket/${ticket.id}`), {
                 method: 'PATCH',
                 body: JSON.stringify({
-                    inspector: inspector.id,
                     status: TicketStatus.ASSIGNED
                 })
             });
+            const { status } = result;
             setProgress(false);
-            toast.success(`Ticket assigned to ${inspector.fullName}`);
-            router.refresh();
+            if (status === 200) {
+                toast.success(`Ticket marked as assigned`);
+                router.refresh();
+            } else {
+                toast.error("Failed to update ticket");
+            }
         } catch (error) {
-            setProgress(false);
+            setProgress(true);
+            toast.error("Server error");
             console.log(error);
         }
     };
@@ -161,6 +184,10 @@ export function RowActions({
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuItem onClick={() => setOpen(true)}>
                         <AiOutlineUserAdd className="mr-2 h-4 w-4" />
+                        Edit
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleInspectorAssign}>
+                        <AiOutlineUserDelete className="mr-2 h-4 w-4" />
                         Assign
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleUnassign}>

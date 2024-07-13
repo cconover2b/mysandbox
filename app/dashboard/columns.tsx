@@ -1,16 +1,16 @@
-// app/dashboard/columns.tsx
 'use client'
+// app/dashboard/columns.tsx
 
 // Importing necessary components and types
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Ticket, User } from "@/types";
-import { ColumnDef } from "@tanstack/react-table";
-import { CiImageOff } from 'react-icons/ci';
-import { AiOutlineArrowUp } from 'react-icons/ai';
-import { Badge } from "@/components/ui/badge";
-import { RowActions } from "./row-actions";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"; // Avatar components for displaying user photos
+import { Button } from "@/components/ui/button"; // Button component for UI interactions
+import { Ticket, User } from "@/types"; // Type definitions for Ticket and User
+import { ColumnDef } from "@tanstack/react-table"; // Column definition type from react-table library
+import { CiImageOff } from 'react-icons/ci'; // Icon for image fallback
+import { AiOutlineArrowUp } from 'react-icons/ai'; // Icon for sorting indicator
+import { Badge } from "@/components/ui/badge"; // Badge component for status display
+import { RowActions } from "./row-actions"; // Row actions component for additional row-specific actions
+import { Checkbox } from "@/components/ui/checkbox"; // Checkbox component for row selection
 
 // Define the columns for the table, specifying the type as an array of ColumnDef<Ticket>
 export const columns: ColumnDef<Ticket>[] = [
@@ -30,7 +30,7 @@ export const columns: ColumnDef<Ticket>[] = [
                 aria-label="select row"
             />
         ),
-        enableSorting: false
+        enableSorting: false // Disable sorting for the selection column
     },
     {
         accessorKey: 'photo',

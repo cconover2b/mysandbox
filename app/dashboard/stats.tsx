@@ -74,7 +74,8 @@ async function Stats() {
                         Assigned
                     </CardTitle>
                     <div className="stat-figure text-white">
-                        <MdOutlineAssignmentTurnedIn size="2em" />
+                        {/* <MdOutlineAssignmentTurnedIn size="2em" /> */}
+                        <MdPersonAddDisabled size="2em" />
                     </div>
                 </CardHeader>
                 <CardContent>

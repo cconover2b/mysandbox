@@ -86,6 +86,7 @@ export async function PATCH(
     } else {
         ticket.assignedInspector = inspector || ticket.assignedInspector;
     }
+    
 
     ticket.status = status || ticket.status;
 
