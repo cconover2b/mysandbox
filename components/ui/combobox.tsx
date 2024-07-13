@@ -1,5 +1,4 @@
 // components/ui/combobox.tsx
-// Updated Code with Additional Safeguards and Logging
 'use client'
 
 import * as React from "react"
@@ -48,6 +47,7 @@ export function Combobox({
 
         if (Array.isArray(fetchedUsers)) {
           setUsers(fetchedUsers)
+          console.log('Users state updated:', fetchedUsers) // Log state update
         } else {
           console.error('Fetched data is not an array:', fetchedUsers)
           setUsers([])
@@ -69,6 +69,7 @@ export function Combobox({
       onValueSelect(user)
       setValue(user)
       setOpen(false)
+      console.log('Selected user:', user) // Log selected user
     }
   }
 
@@ -102,13 +103,13 @@ export function Combobox({
             ) : (
               safeUsers.map((user) => (
                 <CommandItem
-                  key={user.id}
+                  key={user._id}
                   onSelect={() => handleSelect(user.fullName)}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value?.id === user.id ? "opacity-100" : "opacity-0"
+                      value?._id === user._id ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {user.fullName}

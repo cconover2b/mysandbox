@@ -6,7 +6,9 @@ import { hash, compare } from 'bcrypt-ts'
 const BASE_URL = "http://localhost:3000/api/"
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  // Safeguard against undefined inputs
+  const safeInputs = inputs.filter(input => input !== undefined && input !== null)
+  return twMerge(clsx(safeInputs))
 }
 
 export function buildUrl(endPoint: string): string {

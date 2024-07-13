@@ -2,7 +2,6 @@
 import { Ticket, TicketStatus } from "@/types";
 import mongoose, { Schema, model, models } from "mongoose";
 
-
 const TicketSchema = new Schema<Ticket>({
     submitterName: String,
     submitterPhone: String,
@@ -23,11 +22,12 @@ const TicketSchema = new Schema<Ticket>({
     photo: String,
     // source: https://www.mongodb.com/docs/manual/reference/geojson/
     latlong: {
-        type: { type: String, default: "Point"},
+        type: { type: String, default: "Point" },
         coordinates: [Number]
     }
 }, {
-    toJSON: { getters: true }
+    toJSON: { getters: true },
+    timestamps: true // Add this line to enable timestamps
 });
 
-export const TicketModel = models.Ticket || model('Ticket', TicketSchema)
+export const TicketModel = models.Ticket || model('Ticket', TicketSchema);
